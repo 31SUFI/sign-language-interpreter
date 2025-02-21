@@ -1,5 +1,3 @@
-I'll help you create a comprehensive README for your Sign Language Interpreter app:
-
 # Sign Language Interpreter App 🤟
 
 A real-time sign language interpretation application powered by Gemini AI, built with Flutter. This app helps bridge communication gaps by translating sign language gestures into text instantly.
@@ -133,18 +131,13 @@ Contributions are welcome! Here's how you can help:
 
 ---
 
-## License 📄
 
-[Add your license information here]
-
----
 
 ## Acknowledgments 🙏
 
 - Google's Gemini AI for powering the translations
 - Flutter team for the amazing framework
-- [Add any other acknowledgments]
 
 ---
 
-Feel free to customize this README with your specific repository details, screenshots, and additional information!
+
