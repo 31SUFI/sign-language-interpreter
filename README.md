@@ -6,7 +6,7 @@ A real-time sign language interpretation application powered by Gemini AI, built
 
 ## App Demo 🎥
 
-[Add your demo video link here]
+[Watch Demo on Google Drive](https://drive.google.com/file/d/1BASLcDW8jPQBpuVgU4w98o2NANzgQDux/view?usp=drivesdk)
 
 ---
 
