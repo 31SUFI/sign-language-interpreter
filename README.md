@@ -59,7 +59,7 @@ A real-time sign language interpretation application powered by Gemini AI, built
 
 ### **1. Clone the Repository**
 ```bash
-git clone [your-repository-url]
+git clone [https://github.com/31SUFI/sign-language-interpreter.git]
 ```
 
 ### **2. Set Up Gemini API**
