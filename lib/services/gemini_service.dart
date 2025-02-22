@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:camera/camera.dart';
 import 'dart:io';

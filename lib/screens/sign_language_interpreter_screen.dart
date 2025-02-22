@@ -17,6 +17,7 @@ class _SignLanguageInterpreterScreenState
   final GeminiService _geminiService = GeminiService();
   String _interpretation = '';
   bool _isProcessing = false;
+  bool _isInterpreting = false;
 
   Future<void> processImage(XFile image) async {
     if (_isProcessing) return;
@@ -42,6 +43,15 @@ class _SignLanguageInterpreterScreenState
     }
   }
 
+  void _toggleInterpreting() {
+    setState(() {
+      _isInterpreting = !_isInterpreting;
+      if (!_isInterpreting) {
+        _interpretation = '';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +66,7 @@ class _SignLanguageInterpreterScreenState
             child: CameraView(
               onImageCaptured: processImage,
               isProcessing: _isProcessing,
+              isInterpreting: _isInterpreting,
             ),
           ),
           Expanded(
@@ -66,6 +77,12 @@ class _SignLanguageInterpreterScreenState
             ),
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _toggleInterpreting,
+        icon: Icon(_isInterpreting ? Icons.stop : Icons.play_arrow),
+        label: Text(_isInterpreting ? 'Stop' : 'Start'),
+        backgroundColor: _isInterpreting ? Colors.red : Colors.green,
       ),
     );
   }
