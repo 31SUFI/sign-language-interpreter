@@ -13,18 +13,37 @@ class InterpretationResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Interpretation History',
-            style: Theme.of(context).textTheme.titleLarge,
+          Row(
+            children: [
+              Text(
+                'Translation',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+              ),
+              const SizedBox(width: 8),
+              Icon(
+                Icons.translate,
+                size: 20,
+                color: Colors.blue[600],
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 16),
           Expanded(
             child: isProcessing
-                ? const Center(child: CircularProgressIndicator())
+                ? Center(
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Colors.blue[600]!,
+                      ),
+                    ),
+                  )
                 : ListView.builder(
                     reverse: true,
                     itemCount: interpretationHistory.isEmpty
@@ -32,19 +51,32 @@ class InterpretationResult extends StatelessWidget {
                         : interpretationHistory.length,
                     itemBuilder: (context, index) {
                       if (interpretationHistory.isEmpty) {
-                        return const Text(
-                          'No interpretations yet',
-                          textAlign: TextAlign.center,
+                        return Center(
+                          child: Text(
+                            'No translations yet',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 16,
+                            ),
+                          ),
                         );
                       }
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Card(
+                          elevation: 0,
+                          color: Colors.grey[50],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                           child: Padding(
-                            padding: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(12),
                             child: Text(
                               interpretationHistory[index],
-                              style: Theme.of(context).textTheme.bodyLarge,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
                             ),
                           ),
                         ),

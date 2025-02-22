@@ -22,6 +22,7 @@ class CameraView extends StatefulWidget {
 class _CameraViewState extends State<CameraView> {
   CameraController? _controller;
   bool _isCameraInitialized = false;
+  bool _isStreaming = false;
   DateTime _lastProcessedTime = DateTime.now();
   List<double>? _previousLuminances;
   static const double _motionThreshold =
@@ -47,19 +48,42 @@ class _CameraViewState extends State<CameraView> {
   }
 
   Future<void> _startInterpreting() async {
-    if (_controller != null) {
+    if (_controller == null || !_controller!.value.isInitialized) {
+      debugPrint('Camera controller not initialized');
+      return;
+    }
+
+    if (_isStreaming) {
+      debugPrint('Image stream already running');
+      return;
+    }
+
+    try {
       await _controller!.startImageStream(_processImageStream);
+      _isStreaming = true;
+    } catch (e) {
+      debugPrint('Error starting image stream: $e');
     }
   }
 
   Future<void> _stopInterpreting() async {
-    if (_controller != null) {
+    if (_controller == null || !_controller!.value.isInitialized) return;
+
+    if (!_isStreaming) return;
+
+    try {
       await _controller!.stopImageStream();
+      _isStreaming = false;
+    } catch (e) {
+      debugPrint('Error stopping image stream: $e');
     }
   }
 
   Future<void> _initializeCamera() async {
-    if (cameras.isEmpty) return;
+    if (cameras.isEmpty) {
+      debugPrint('No cameras available');
+      return;
+    }
 
     _controller = CameraController(
       cameras[0],
@@ -70,9 +94,14 @@ class _CameraViewState extends State<CameraView> {
 
     try {
       await _controller!.initialize();
-      setState(() {
-        _isCameraInitialized = true;
-      });
+      if (mounted) {
+        setState(() {
+          _isCameraInitialized = true;
+        });
+        if (widget.isInterpreting) {
+          await _startInterpreting();
+        }
+      }
     } catch (e) {
       debugPrint('Camera initialization error: $e');
     }
@@ -144,6 +173,7 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   void dispose() {
+    _stopInterpreting();
     _controller?.dispose();
     super.dispose();
   }
