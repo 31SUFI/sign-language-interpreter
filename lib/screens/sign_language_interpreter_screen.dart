@@ -18,6 +18,8 @@ class _SignLanguageInterpreterScreenState
   final List<String> _interpretationHistory = [];
   bool _isProcessing = false;
   bool _isInterpreting = false;
+  String _summary = '';
+  bool _isGeneratingSummary = false;
 
   Future<void> processImage(XFile image) async {
     if (_isProcessing) return;
@@ -45,11 +47,70 @@ class _SignLanguageInterpreterScreenState
     }
   }
 
+  Future<void> _generateSummary() async {
+    if (_interpretationHistory.isEmpty) return;
+
+    setState(() {
+      _isGeneratingSummary = true;
+    });
+
+    try {
+      final summary =
+          await _geminiService.generateSummary(_interpretationHistory);
+      setState(() {
+        _summary = summary;
+      });
+      _showSummaryDialog();
+    } catch (e) {
+      debugPrint('Error generating summary: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error generating summary')),
+      );
+    } finally {
+      setState(() {
+        _isGeneratingSummary = false;
+      });
+    }
+  }
+
+  void _showSummaryDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(Icons.summarize, color: Colors.blue[600]),
+            const SizedBox(width: 8),
+            const Text('Conversation Summary'),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Text(
+            _summary,
+            style: const TextStyle(fontSize: 16, height: 1.5),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+      ),
+    );
+  }
+
   void _toggleInterpreting() {
     setState(() {
       _isInterpreting = !_isInterpreting;
       if (_isInterpreting) {
         _interpretationHistory.clear();
+        _summary = '';
+      } else if (_interpretationHistory.isNotEmpty) {
+        _generateSummary();
       }
     });
   }

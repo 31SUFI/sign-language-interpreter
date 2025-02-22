@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'screens/onboarding_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 List<CameraDescription> cameras = [];
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables
+  await dotenv.load(fileName: ".env");
 
   // Initialize cameras
   try {
