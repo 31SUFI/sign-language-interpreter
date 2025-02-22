@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'dart:math';
 import '../main.dart';
 
 class CameraView extends StatefulWidget {
