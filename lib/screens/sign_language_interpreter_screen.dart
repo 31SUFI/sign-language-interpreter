@@ -15,7 +15,7 @@ class SignLanguageInterpreterScreen extends StatefulWidget {
 class _SignLanguageInterpreterScreenState
     extends State<SignLanguageInterpreterScreen> {
   final GeminiService _geminiService = GeminiService();
-  String _interpretation = '';
+  final List<String> _interpretationHistory = [];
   bool _isProcessing = false;
   bool _isInterpreting = false;
 
@@ -29,7 +29,9 @@ class _SignLanguageInterpreterScreenState
     try {
       final result = await _geminiService.interpretSignLanguage(image);
       setState(() {
-        _interpretation = result;
+        if (result.isNotEmpty) {
+          _interpretationHistory.insert(0, result);
+        }
       });
     } catch (e) {
       debugPrint('Error processing image: $e');
@@ -46,8 +48,8 @@ class _SignLanguageInterpreterScreenState
   void _toggleInterpreting() {
     setState(() {
       _isInterpreting = !_isInterpreting;
-      if (!_isInterpreting) {
-        _interpretation = '';
+      if (_isInterpreting) {
+        _interpretationHistory.clear();
       }
     });
   }
@@ -72,7 +74,7 @@ class _SignLanguageInterpreterScreenState
           Expanded(
             flex: 1,
             child: InterpretationResult(
-              interpretation: _interpretation,
+              interpretationHistory: _interpretationHistory,
               isProcessing: _isProcessing,
             ),
           ),

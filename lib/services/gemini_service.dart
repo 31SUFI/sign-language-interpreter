@@ -22,7 +22,7 @@ class GeminiService {
       // Define the prompt for interpreting sign language
       final prompt = '''
         Act as a sign language interpreter. Analyze this image and interpret the sign language gesture shown.
-        Provide a clear and concise interpretation of the meaning.
+        Provide a clear and concise/breif as possible interpretation of the meaning.
         If you're not confident about the interpretation, please indicate that.
       ''';
 
