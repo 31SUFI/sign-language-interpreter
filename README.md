@@ -1,4 +1,4 @@
-# Sign Language Interpreter App 🤟
+# AI-Powered Sign Language Interpreter App 🤟
 
 A real-time sign language interpretation application powered by Gemini AI, built with Flutter. This app helps bridge communication gaps by translating sign language gestures into text instantly.
 
